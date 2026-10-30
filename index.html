@@ -4597,6 +4597,26 @@ const AccountsPage = ({ db, userId, appId, setError }) => {
                         <tr><td colSpan={11} className="py-6 text-center text-slate-400">No matching transactions.</td></tr>
                       )}
                     </tbody>
+                    {filteredLog.length > 0 && (() => {
+                      const sum = (f) => filteredLog.reduce((s, t) => s + (Number(f(t)) || 0), 0);
+                      const tAdv = sum((t) => t.advanceAmount), tCash = Math.round(sum((t) => t.onSpotCash)), tUpi = Math.round(sum((t) => t.onSpotUPI));
+                      const tSpot = sum((t) => t.onSpotTotal), tGrand = sum((t) => t.grandTotal);
+                      return (
+                        <tfoot>
+                          <tr className="border-t-2 border-slate-300 bg-slate-100 font-extrabold text-slate-900">
+                            <td className="py-2.5 pr-3 whitespace-nowrap" colSpan={3}>Total · {filteredLog.length} booking{filteredLog.length === 1 ? '' : 's'}</td>
+                            <td className="py-2.5 pr-3 text-right tabular whitespace-nowrap">{rupee(tAdv)}</td>
+                            <td className="py-2.5 pr-3"></td>
+                            <td className="py-2.5 pr-3 text-right tabular whitespace-nowrap">{rupee(tCash)}</td>
+                            <td className="py-2.5 pr-3 text-right tabular whitespace-nowrap">{rupee(tUpi)}</td>
+                            <td className="py-2.5 pr-3 text-right tabular whitespace-nowrap">{rupee(tSpot)}</td>
+                            <td className="py-2.5 pr-3"></td>
+                            <td className="py-2.5 pr-3 text-right tabular whitespace-nowrap">{rupee(tGrand)}</td>
+                            <td className="py-2.5 pr-3"></td>
+                          </tr>
+                        </tfoot>
+                      );
+                    })()}
                   </table>
                 </div>
               </Card>
